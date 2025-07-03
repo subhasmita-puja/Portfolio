@@ -1,0 +1,17 @@
+{
+  "name": "portfolio-website",
+  "version": "1.0.0",
+  "description": "Subhasmita Sahoo Portfolio Website",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server . -p 3000 -o",
+    "build": "echo 'Build complete'",
+    "preview": "npx http-server . -p 4173 -o"
+  },
+  "keywords": ["portfolio", "javascript", "html", "css"],
+  "author": "Subhasmita Sahoo",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
