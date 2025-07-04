@@ -1,6 +1,6 @@
 # 🌐 Personal Portfolio Website
 
-![Portfolio Screenshot](/portfolio.png)
+![Portfolio Screenshot](./Images/portfolio.png)
 
 Welcome to my **personal portfolio website**! 🚀  
 This project is built using **HTML**, **CSS**, and **JavaScript** to showcase my work, skills, and passion for web development.
