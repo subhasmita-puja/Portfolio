@@ -495,24 +495,31 @@
 }
 
 #project1 {
-  background-image: url(./projects/project-1.png);
+   background-image: url(/projects/project-1.png);
+  left: 5%;
+   width: 80%;
+  margin-top: 5rem;
+}
+
+#project2 {
+  background-image: url(./projects/project-2.png);
   right: 5%;
   width: 80%;
   margin-top: 5rem;
 }
 
-#project2 {
-   background-image: url(/projects/project-2.png);
+#project3 {
+   background-image: url(/projects/project-3.png);
   left: 5%;
 }
 
-#project3 {
-  background-image: url(/projects/project-3.png);
+#project4 {
+  background-image: url(/projects/project-4.png);
   right: 5%;
 }
 
-#project4 {
- background-image: url(/projects/project-4.png);
+#project5 {
+ background-image: url(/projects/Project-5.png);
   left: 5%;
 }
 
