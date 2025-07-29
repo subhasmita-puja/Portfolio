@@ -53,7 +53,6 @@ If you’d like to collaborate, hire me, or just say hi, feel free to reach out:
 
 - ✅ Add project filters
 - 🔄 Add blog section
-- 🔄 Integrate contact form backend
 
 ---
 
