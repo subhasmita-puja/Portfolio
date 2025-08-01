@@ -489,49 +489,57 @@
 
 .projectContainer {
   width: 100%;
+ max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 120px;
+  padding: 0 20px;
 }
 
 #project1 {
-   background-image: url(/projects/project-1.png);
-  left: 5%;
-   width: 80%;
+  background-image: url(/projects/project-1.png);
+  margin-left: 5%;
+  width: 80%;
   margin-top: 5rem;
 }
 
 #project2 {
   background-image: url(./projects/project-2.png);
-  right: 5%;
+  margin-left: auto;
+  margin-right: 5%;
   width: 80%;
   margin-top: 5rem;
 }
 
 #project3 {
-   background-image: url(/projects/project-3.png);
-  left: 5%;
+  background-image: url(/projects/project-3.png);
+  margin-left: 5%;
+  width: 80%;
 }
 
 #project4 {
   background-image: url(/projects/project-4.png);
-  right: 5%;
+  margin-left: auto;
+  margin-right: 5%;
+  width: 80%;
 }
 
 #project5 {
- background-image: url(/projects/project-5.png);
-  left: 5%;
+  background-image: url(/projects/project-5.png);
+  margin-left: 5%;
+  width: 80%;
 }
 
 .projectCard {
-  width: 80%;
   height: 500px;
   background-size: cover;
   background-repeat: no-repeat;
+  background-position: center;
   position: relative;
   background-color: rgba(255, 255, 255, 0);
   border-radius: 20px;
-  margin: 2rem auto;
+  margin: 2rem 0;
   z-index: 1;
   transition: 1s;
 }
@@ -610,13 +618,13 @@
   bottom: 7%;
 }
 
-.leftProjectContent {
-  left: 5%;
-}
-
-.rightProjectContent {
-  right: 5%;
-}
+ /* Fix all project content positioning */
+    .leftProjectContent,
+    .rightProjectContent {
+        left: 5%;
+        right: auto;
+        max-width: 85%;
+    }
 
 .projectSkillsContainer {
   display: flex;
@@ -1058,23 +1066,55 @@ textarea {
 /* Mobile Responsive */
 @media (max-width: 900px) {
   .hero {
-    padding: 11rem 1.5rem;
+   padding-top: 50px; /* Stick to navbar */
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 2rem;
+    min-height: calc(100vh - 50px); /* Account for navbar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .hero-section {
-    display: flex;
+     display: flex;
     flex-direction: column;
-    padding-top: 0;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 1;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin-top: 0;
+  }
+
+.space {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
   }
 
   .space video {
-    transform: translate(-50%, -160%) scale(1.1);
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: -50px; /* Compensate for navbar */
+    left: 0;
+    object-fit: cover;
+    filter: opacity(60%) contrast(120%);
+    z-index: 0;
   }
   
 
   .hero-section-heading {
-    font-size: 18px;
-    line-height: 18px;
+    font-size: 22px;
+    line-height: 24px;
+    text-align: center;
   }
 
   .role,
@@ -1087,23 +1127,26 @@ textarea {
   }
 
   .hero-section-left {
-    align-items: center;
+  align-items: center;
     justify-content: center;
-    top: -10%;
-    gap: 1rem;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 100%;
   }
 
   .hero-section-description {
-    font-size: 13px;
-    width: 95%;
-    max-width: 480px;
+    font-size: 14px;
+    width: 90%;
+    max-width: 100%;
     text-align: center;
+    margin-top: 1rem;
   }
 
   .btn {
-    font-size: 12px;
-    margin-bottom: 2.5rem;
-    padding: 0.9rem 2rem;
+    font-size: 14px;
+    margin-top: 1.5rem;
+    padding: 1rem 2rem;
+    width: fit-content;
   }
 
   .faded-text {
@@ -1112,36 +1155,43 @@ textarea {
     text-align: center;
     bottom: -1.6%;
     left: 0%;
+    position: absolute;
   }
 
   .myCard {
-    height: 22rem;
-    width: 15rem;
+    height: 20rem;
+    width: 14rem;
+    margin-top: 2rem;
   }
 
-  .projectTitle {
-    font-size: 50px;
+ .projectTitle {
+    font-size: 40px;
+    padding-top: 2rem;
   }
 
   .projectContainer {
-    max-width: 650px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 0 0;
-    gap: 2rem;
+    padding: 0 10px;
+    gap: 40px;
   }
 
   #project1,
   #project2,
   #project3,
-  #project4 {
-    left: 0%;
-    right: 0%;
+  #project4,
+  #project5 {
+    left: unset;
+    right: unset;
+    margin: 1rem auto;
+    width: 95%;
+    margin-top: 2rem ;
   }
 
   .projectCard {
-    margin: 2rem auto;
-    height: 250px;
-    margin: 0 auto;
+    width: 100% !important;
+    height: 350px;
+    margin: 1rem 0;
     box-shadow: 0px 0px 100px rgba(61, 0, 66, 0.682);
   }
 
@@ -1154,15 +1204,18 @@ textarea {
   }
 
   .projectContent {
-    gap: 0rem;
-    padding: 0.5em;
-    bottom: 2%;
+    gap: 0.5rem;
+    padding: 1em;
+    bottom: 5%;
     transform: scale(1.05);
+    max-width: 95%;
   }
 
   .projectNumber {
-    font-size: 50px;
-    display: block;
+    font-size: 40px;
+    top: -15px;
+    right: 10px;
+    left: auto;
     filter: drop-shadow(0px 0px 19px #ffffff);
   }
 
@@ -1174,7 +1227,8 @@ textarea {
 
   .leftProjectContent,
   .rightProjectContent {
-    left: 4%;
+    left: 2%;
+    max-width: 96%;
   }
 
   .btnGroup {
@@ -1182,29 +1236,33 @@ textarea {
   }
 
   .projectBtn {
-    height: 20px;
-    min-width: none;
-    font-size: 0.5em;
+    height: 30px;
+    min-width: 80px;
+    font-size: 0.7em;
+    padding: 0.5em 1em;
   }
 
   .projectSkillsContainer {
-    gap: 0.35em;
+    gap: 0.5em;
+    max-width: 90%;
   }
 
   .projectSkill {
-    width: 17px;
+    width: 25px;
   }
 
   .projectHeading {
-    font-size: 16px;
+    font-size: 24px;
+    line-height: 1.5rem;
   }
 
   .projectSubHeading {
-    font-size: 9px;
+    font-size: 12px;
+    width: 90%;
   }
 
   .icon {
-    font-size: 16px;
+    font-size: 20px;
     filter: drop-shadow(0px 0px 8px #ffffff);
   }
 
@@ -1221,10 +1279,9 @@ textarea {
 
   .icon:hover,
   .github:hover .icon {
-    font-size: 16px;
-    scale: none;
+    font-size: 20px;
+    scale: 0.9;
   }
-
   .skillContainer {
     padding: 6rem 3rem 2rem 2rem;
     margin: 1rem auto;
@@ -1297,5 +1354,204 @@ textarea {
   .right > form {
     min-width: 80vw;
     max-width: 450px;
+  }
+}
+
+
+/* Tablet Responsive */
+@media (max-width: 1024px) {
+  .hero {
+    padding-top: 50px;
+    min-height: calc(100vh - 50px);
+  }
+
+  .space video {
+    top: -50px;
+    height: 100vh;
+  }
+  
+  .projectTitle {
+    font-size: 60px;
+    padding-top: 4rem;
+  }
+  
+  .projectContainer {
+    gap: 80px;
+    padding: 0 15px;
+  }
+  
+  #project1,
+  #project2,
+  #project3,
+  #project4,
+  #project5 {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+     margin-top: 3rem;
+  }
+  
+  .projectCard {
+    height: 450px;
+  }
+  
+  .projectHeading {
+    font-size: 45px;
+    line-height: 2.5rem;
+  }
+  
+  .projectSubHeading {
+    font-size: 15px;
+    width: 80%;
+  }
+  
+  .projectSkillsContainer {
+    max-width: 70%;
+  }
+}
+
+/* Small Tablet / Large Mobile */
+@media (max-width: 768px) {
+  .projectTitle {
+    font-size: 45px;
+    padding-top: 3rem;
+  }
+  
+  .projectContainer {
+    gap: 60px;
+    padding: 0 10px;
+  }
+  
+  #project1,
+  #project2,
+  #project3,
+  #project4,
+  #project5 {
+    width: 95%;
+    margin-left: 2.5% !important;
+    margin-right: 2.5% !important;
+    margin-top: 2rem !important;
+  }
+  
+  .projectCard {
+    height: 400px;
+  }
+  
+  .projectHeading {
+    font-size: 35px;
+    line-height: 2rem;
+  }
+  
+  .projectSubHeading {
+    font-size: 14px;
+    width: 85%;
+  }
+  
+  .projectContent {
+    padding: 1.5em;
+    max-width: 90%;
+  }
+  
+  .projectSkillsContainer {
+    max-width: 80%;
+    gap: 0.8em;
+  }
+  
+  .projectSkill {
+    width: 35px;
+  }
+}
+
+
+
+/* Extra Small Mobile */
+@media (max-width: 480px) {
+  .hero {
+    padding-top: 50px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 2rem;
+    min-height: calc(100vh - 50px);
+  }
+
+  .space video {
+    width: 100vw;
+    height: 100vh;
+    top: -50px;
+    object-fit: cover;
+    filter: opacity(50%) contrast(125%);
+  }
+
+  .hero-section-heading {
+    font-size: 18px;
+    line-height: 20px;
+  }
+
+  .role,
+  .hero-section-sub-heading {
+    font-size: 20px;
+    line-height: 22px;
+  }
+
+  .hero-section-description {
+    font-size: 13px;
+    width: 95%;
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 0.8rem 1.5rem;
+  }
+
+  .myCard {
+    height: 18rem;
+    width: 12rem;
+  }
+
+  .faded-text {
+    font-size: 3rem;
+  }
+
+  .projectTitle {
+    font-size: 32px;
+    padding-top: 1.5rem;
+  }
+  
+  .projectContainer {
+    padding: 0 5px;
+    gap: 30px;
+  }
+  
+  .projectCard {
+    height: 300px;
+  }
+  
+  .projectHeading {
+    font-size: 20px;
+    line-height: 1.3rem;
+  }
+  
+  .projectSubHeading {
+    font-size: 11px;
+    width: 95%;
+  }
+  
+  .projectContent {
+    padding: 0.8em;
+    bottom: 3%;
+  }
+  
+  .projectSkill {
+    width: 20px;
+  }
+  
+  .projectBtn {
+    font-size: 0.6em;
+    height: 25px;
+    min-width: 60px;
+  }
+  
+  .icon {
+    font-size: 18px;
   }
 }
