@@ -1,16 +1,15 @@
-// Wait for DOM to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
     // Initialize typed.js for role animation
     if (typeof Typed !== 'undefined') {
         new Typed('.role', {
             strings: [
                 " Full Stack Developer",
-                 " Web Developer",
-                 " Frontend Developer",
-                 " Coder",
-                 "React Devloper",
+                " Web Developer",
+                " Frontend Developer",
+                " Coder",
+                " React Developer",
                 " UI-UX Designer",
-                 "Subhasmita Sahoo",
+                " Subhasmita Sahoo",
             ],
             typeSpeed: 100,
             backSpeed: 100,
