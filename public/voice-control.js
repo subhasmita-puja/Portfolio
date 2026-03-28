@@ -37,46 +37,115 @@ document.addEventListener("DOMContentLoaded", function () {
   outline: 2px solid #fff;
   background: linear-gradient(135deg, #DC2430 18%, #4AB1F1 82%);
 }
-.voice-indicator {
+/* --- New Visual Overlay Styles --- */
+.voice-overlay {
   position: fixed;
-  top: 65px;
-  right: 20px;
-  background: rgba(26,26,26,0.93);
-  color: #fff;
-  padding: 12px 18px;
-  border-radius: 18px;
-  font-size: 15px;
-  letter-spacing: 0.5px;
-  z-index: 1003;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
   display: none;
-  font-family: inherit;
-  backdrop-filter: blur(10px);
-  border: 1px solid #fff4;
-  min-width: 110px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.3s ease;
 }
-/* Notification Styles */
+.voice-overlay.active { display: flex; }
+.wave-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wave-ring {
+  position: absolute;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #4AB1F1, #DC2430, #4AB1F1);
+  mask: radial-gradient(circle, transparent 69%, black 70%);
+  -webkit-mask: radial-gradient(circle, transparent 69%, black 70%);
+  opacity: 0.8;
+  filter: drop-shadow(0 0 8px rgba(74, 177, 241, 0.6));
+}
+.wave-ring:nth-child(1) { 
+  width: 100%; 
+  height: 100%; 
+  animation: rotate-wave 3s linear infinite; 
+}
+.wave-ring:nth-child(2) { 
+  width: 92%; 
+  height: 92%; 
+  animation: rotate-wave 5s linear reverse infinite; 
+  opacity: 0.5;
+  filter: blur(1px);
+}
+.mic-center-icon {
+  width: 60px;
+  height: 100px;
+  background: #999;
+  border-radius: 30px;
+  position: relative;
+  z-index: 2001;
+  display: flex;
+  justify-content: center;
+}
+.mic-center-icon::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  width: 80px;
+  height: 40px;
+  border: 6px solid #999;
+  border-top: 0;
+  border-radius: 0 0 40px 40px;
+}
+.mic-center-icon::before {
+  content: '';
+  position: absolute;
+  bottom: -35px;
+  width: 6px;
+  height: 15px;
+  background: #999;
+}
+@keyframes rotate-wave {
+  from { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.05); }
+  to { transform: rotate(360deg) scale(1); }
+}
+.voice-status-text {
+  margin-top: 30px;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+.voice-indicator,
 .voice-notification {
   position: fixed;
-  bottom: 150px;
-  right: 35px;
-  z-index: 1400;
-  background: linear-gradient(135deg, #4AB1F1 0%, #DC2430 100%);
-  color: #fff;
-  padding: 13px 24px;
-  border-radius: 22px;
-  font-size: 1rem;
-  font-weight: 600;
-  display: none;
-  box-shadow: 0 9px 32px rgba(46,20,80,0.16);
-  letter-spacing: .4px;
+  background: linear-gradient(135deg, #4AB1F1, #DC2430);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 1003;
   opacity: 0;
-  transition: opacity .2s, transform .2s;
-  pointer-events: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(74,177,241,0.4);
+}
+.voice-indicator {
+  top: 20px;
+  right: 20px;
+}
+.voice-notification {
+  bottom: 140px;
+  right: 20px;
 }
 .voice-notification.show {
-  display: block;
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(-10px);
 }
 @media (max-width: 650px) {
   .voice-control-btn { right: 9px; bottom: 17px; width: 40px; height: 40px; font-size: 21px; }
@@ -86,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
   `;
   document.head.appendChild(style);
 
-  // ===== Add Mic Button and Notification if not exist =====
+  // ===== Add Mic Button and Elements =====
   let micBtn = document.getElementById("voiceControlBtn");
   if (!micBtn) {
     micBtn = document.createElement('button');
@@ -96,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
     micBtn.title = "Click to speak a voice command";
     document.body.appendChild(micBtn);
   }
+  
   let voiceIndicator = document.getElementById("voiceIndicator");
   if (!voiceIndicator) {
     voiceIndicator = document.createElement('div');
@@ -103,6 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
     voiceIndicator.className = "voice-indicator";
     document.body.appendChild(voiceIndicator);
   }
+  
   let notificationDiv = document.getElementById('voiceNotification');
   if (!notificationDiv) {
     notificationDiv = document.createElement('div');
@@ -111,6 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.appendChild(notificationDiv);
   }
 
+  // ===== VOICE NOTIFICATION FUNCTION =====
   function showVoiceNotification(message, duration = 2200) {
     notificationDiv.textContent = message;
     notificationDiv.classList.add("show");
@@ -122,7 +194,90 @@ document.addEventListener("DOMContentLoaded", function () {
     }, duration);
   }
 
-  // ===== MIC LOGIC & SEAMLESS SECTION SELECTORS =====
+  // ===== CREATE VISUAL OVERLAY =====
+  let voiceOverlay = document.getElementById("voiceOverlay");
+  if (!voiceOverlay) {
+    voiceOverlay = document.createElement('div');
+    voiceOverlay.id = "voiceOverlay";
+    voiceOverlay.className = "voice-overlay";
+    voiceOverlay.innerHTML = `
+      <div class="wave-container">
+        <div class="wave-ring"></div>
+        <div class="wave-ring"></div>
+        <div class="mic-center-icon"></div>
+      </div>
+      <div id="overlayStatus" class="voice-status-text">Listening...</div>
+    `;
+    document.body.appendChild(voiceOverlay);
+  }
+
+  const overlayStatus = document.getElementById("overlayStatus");
+
+  // ===== FEMALE VOICE TEXT-TO-SPEECH FUNCTION =====
+  function speakFeedback(message, lang) {
+    // Cancel any ongoing speech
+    speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(message);
+    utterance.lang = lang === 'hi' ? 'hi-IN' : lang === 'or' ? 'or-IN' : 'en-US';
+    utterance.rate = 0.9;      // Natural speaking speed
+    utterance.pitch = 1.2;     // Higher pitch = feminine tone
+    utterance.volume = 0.8;
+    
+    // Wait for voices to load
+    function assignVoice() {
+      const voices = speechSynthesis.getVoices();
+      
+      // PRIORITIZE FEMALE VOICES
+      let femaleVoice = null;
+      
+      if (lang === 'en') {
+        // English female voices (most common)
+        femaleVoice = voices.find(v => 
+          v.lang.startsWith('en') && (
+            v.name.toLowerCase().includes('female') ||
+            v.name.toLowerCase().includes('woman') ||
+            v.name.toLowerCase().includes('samantha') ||
+            v.name.toLowerCase().includes('cortana') ||
+            v.name.toLowerCase().includes('zira') ||
+            v.name.includes('Google US English') ||
+            v.name.includes('Microsoft Zira') ||
+            v.name.includes('Samantha') ||
+            v.gender === 'female'  // Some browsers support this
+          )
+        );
+      }
+      else if (lang === 'hi') {
+        femaleVoice = voices.find(v => 
+          v.lang.startsWith('hi') && (
+            v.name.toLowerCase().includes('female') ||
+            v.name.includes('Google हिंदी') ||
+            v.gender === 'female'
+          )
+        );
+      }
+      else if (lang === 'or') {
+        femaleVoice = voices.find(v => 
+          v.lang.startsWith('or') || 
+          (v.lang.startsWith('en') && v.gender === 'female')
+        );
+      }
+      
+      // Fallback to best available voice
+      utterance.voice = femaleVoice || voices.find(v => v.lang.startsWith(utterance.lang.slice(0,2)));
+      
+      speechSynthesis.speak(utterance);
+    }
+    
+    // Handle voice loading delay
+    if (speechSynthesis.getVoices().length > 0) {
+      assignVoice();
+    } else {
+      speechSynthesis.onvoiceschanged = assignVoice;
+    }
+  }
+
+  // ===== SPEECH RECOGNITION SETUP =====
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) {
     micBtn.style.display = "none";
@@ -139,17 +294,15 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateRecognitionLang() {
     if (window.langManager) {
       recognition.lang =
-        window.langManager.currentLang === "en"
-          ? "en-US"
-          : window.langManager.currentLang === "hi"
-          ? "hi-IN"
-          : "or-IN";
+        window.langManager.currentLang === "en" ? "en-US" :
+        window.langManager.currentLang === "hi" ? "hi-IN" : "or-IN";
     }
   }
   updateRecognitionLang();
   recognition.continuous = false;
   recognition.interimResults = false;
 
+  // ===== BUTTON INTERACTIONS =====
   micBtn.addEventListener("mousedown", function () {
     micBtn.classList.add("listening");
   });
@@ -163,44 +316,60 @@ document.addEventListener("DOMContentLoaded", function () {
   micBtn.addEventListener("click", function () {
     updateRecognitionLang();
     recognition.start();
+    
     micBtn.classList.add("listening");
-    voiceIndicator.style.display = "block";
+    voiceOverlay.classList.add("active");
+    
     let listenMsg = (window.langManager && window.langManager.getTranslation)
       ? window.langManager.getTranslation('voice.listening')
       : "Listening...";
-    voiceIndicator.textContent = listenMsg;
-    // If translation for clickToSpeak exists, use it.
-    if (window.langManager && window.langManager.getTranslation) {
-      showVoiceNotification(window.langManager.getTranslation('voice.clickToSpeak'));
-    } else {
-      showVoiceNotification("Click and speak a command");
-    }
+    overlayStatus.textContent = listenMsg;
   });
 
+  // ===== RECOGNITION EVENTS =====
   recognition.onresult = function (event) {
     const transcript = event.results[0][0].transcript.trim().toLowerCase();
     handleVoiceCommand(transcript);
-    let executedMsg = (window.langManager && window.langManager.getTranslation)
+    
+    const lang = (window.langManager && window.langManager.currentLang) ? window.langManager.currentLang : "en";
+    speakFeedback(
+      lang === "en" ? "Command executed successfully" :
+      lang === "hi" ? "आदेश सफलतापूर्वक निष्पादित" :
+      "କମାଣ୍ଡ ସଫଳତାର ସହ ନିର୍ବାହିତ",
+      lang
+    );
+    
+    overlayStatus.textContent = (window.langManager && window.langManager.getTranslation)
       ? window.langManager.getTranslation('voice.commandExecuted')
-      : "Command executed!";
-    voiceIndicator.textContent = executedMsg;
-    micBtn.classList.remove("listening");
-    setTimeout(() => (voiceIndicator.style.display = "none"), 1400);
-  };
-  recognition.onerror = function () {
-    let errMsg = (window.langManager && window.langManager.getTranslation)
-      ? window.langManager.getTranslation('voice.commandNotRecognized')
-      : "Command not recognized";
-    voiceIndicator.textContent = errMsg;
-    showVoiceNotification(errMsg, 2000);
-    micBtn.classList.remove("listening");
-    setTimeout(() => (voiceIndicator.style.display = "none"), 1500);
+      : "Success!";
+    
+    setTimeout(() => {
+      voiceOverlay.classList.remove("active");
+      micBtn.classList.remove("listening");
+    }, 1000);
   };
 
-  // ----- USE ONLY CORRECT SELECTORS -----
+  recognition.onerror = function () {
+    overlayStatus.textContent = "Try Again...";
+    const lang = (window.langManager && window.langManager.currentLang) ? window.langManager.currentLang : "en";
+    speakFeedback(
+      lang === "en" ? "Please try again" :
+      lang === "hi" ? "कृपया पुनः प्रयास करें" :
+      "ଦୟାକରି ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ",
+      lang
+    );
+    
+    setTimeout(() => {
+      voiceOverlay.classList.remove("active");
+      micBtn.classList.remove("listening");
+    }, 1500);
+  };
+
+  // ===== VOICE COMMAND HANDLER =====
   function handleVoiceCommand(command) {
     const lang = (window.langManager && window.langManager.currentLang) ? window.langManager.currentLang : "en";
     let link = null, navMsg = null;
+    
     // Projects
     if (
       (lang === "en" && (command.includes("project") || command.includes("show projects"))) ||
@@ -208,7 +377,7 @@ document.addEventListener("DOMContentLoaded", function () {
       (lang === "or" && (command.includes("ପ୍ରୋଜେକ୍ଟ") || command.includes("ପ୍ରୋଜେକ୍ଟସ୍")))
     ) {
       link = document.querySelector("[href='#projects']");
-      navMsg = "Projects";
+      navMsg = lang === "en" ? "Projects" : lang === "hi" ? "प्रोजेक्ट्स" : "ପ୍ରୋଜେକ୍ଟ୍";
     }
     // Skills
     else if (
@@ -217,44 +386,58 @@ document.addEventListener("DOMContentLoaded", function () {
       (lang === "or" && command.includes("ଦକ୍ଷତା"))
     ) {
       link = document.querySelector("[href='#skills']");
-      navMsg = "Skills";
+      navMsg = lang === "en" ? "Skills" : lang === "hi" ? "कौशल" : "ଦକ୍ଷତା";
     }
-    // Contact Me (note: selector matches your project formula)
+    // Contact Me
     else if (
       (lang === "en" && command.includes("contact")) ||
       (lang === "hi" && command.includes("संपर्क")) ||
       (lang === "or" && command.includes("ସହ ଯୋଗାଯୋଗ"))
     ) {
       link = document.querySelector("[href='#contactMe']");
-      navMsg = "Contact Me";
+      navMsg = lang === "en" ? "Contact Me" : lang === "hi" ? "संपर्क" : "ସହ ଯୋଗାଯୋଗ";
     }
-    // My Self (home/hero-section)
+    // Home/About
     else if (
-      (lang === "en" &&
-        (command.includes("home") || command.includes("about") || command.includes("myself"))) ||
+      (lang === "en" && (command.includes("home") || command.includes("about") || command.includes("myself"))) ||
       (lang === "hi" && command.includes("मैं")) ||
       (lang === "or" && command.includes("ମୁଁ"))
     ) {
       link = document.querySelector("[href='#hero-section']");
-      navMsg = "My Self";
+      navMsg = lang === "en" ? "Home" : lang === "hi" ? "मुख्य" : "ଘର";
     }
     // Not matched
     else {
-      let notFound = (window.langManager && window.langManager.getTranslation)
+      const notFoundMsg = (window.langManager && window.langManager.getTranslation)
         ? window.langManager.getTranslation("voice.commandNotRecognized")
         : "Command not recognized";
-      voiceIndicator.textContent = notFound;
-      showVoiceNotification(notFound, 1800);
+      
+      voiceIndicator.textContent = notFoundMsg;
+      showVoiceNotification(notFoundMsg, 1800);
+      
+      speakFeedback(
+        lang === "en" ? "Command not recognized. Try again." :
+        lang === "hi" ? "आदेश पहचाना नहीं गया। पुनः प्रयास करें।" :
+        "କମାଣ୍ଡ୍ ପରିଚାଳନା ହୋଇନଥିଲା। ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ।",
+        lang
+      );
+      
       setTimeout(() => (voiceIndicator.style.display = "none"), 2000);
+      return;
     }
+    
     if (link) {
       link.click();
-      if (window.langManager && window.langManager.notifications && window.langManager.notifications.voiceCommandHelp) {
-        // If you want section-specific text, extend language.js, but this is section name:
-        showVoiceNotification((window.langManager.notifications.voiceCommandHelp || "Jump to section: ") + navMsg, 1700);
-      } else {
-        showVoiceNotification("Navigating: " + navMsg, 1700);
-      }
+      
+      // FEMALE VOICE NAVIGATION CONFIRMATION
+      const spokenMsg = 
+        lang === "en" ? `Navigating to ${navMsg}` :
+        lang === "hi" ? `${navMsg} पर जा रहे हैं` :
+        `${navMsg}କୁ ଯାଉଛି`;
+      
+      speakFeedback(spokenMsg, lang);
+      
+      showVoiceNotification("✓ " + navMsg, 1700);
     }
   }
 });
